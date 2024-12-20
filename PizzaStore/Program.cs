@@ -45,18 +45,18 @@ app.Run();
 
 static async Task<IResult> GetAllPizza(PizzaDB db)
 {
-    return TypedResults.Ok(await db.Pizzas.ToArrayAsync());
+    return TypedResults.Ok(await db.Pizzas.Select(x => new PizzaDTO(x)).ToArrayAsync());
 }
 
 static async Task<IResult> GetVeggiePizzas(PizzaDB db)
 {
-    return TypedResults.Ok(await db.Pizzas.Where(p => p.IsVeggie).ToListAsync());
+    return TypedResults.Ok(await db.Pizzas.Where(p => p.IsVeggie).Select(x => new PizzaDTO(x)).ToListAsync());
 }
 
 static async Task<IResult> GetPizza(int id, PizzaDB db)
 {
     return await db.Pizzas.FindAsync(id)
-    is Pizza pizza ? TypedResults.Ok(pizza)
+    is Pizza pizza ? TypedResults.Ok(new PizzaDTO(pizza))
     : TypedResults.NotFound();
 }
 
